@@ -2,6 +2,8 @@ import React from 'react'
 import Chip from '@material-ui/core/Chip'
 import Avatar from '@material-ui/core/Avatar'
 
+import {Link} from "react-router-dom";
+
 const chipStyle = {
     margin: "1%"
 }
@@ -39,13 +41,14 @@ function Suggestions(props) {
     const out = suggestions.map(item => {
         const {name, unit} = item;
         return (
-            <Chip
-            key={unit}
-            style={chipStyle}
-            color="secondary" 
-            avatar={getAvatar(unit)} 
-            variant="outlined"
-            label={name} />
+            <Link key={unit} style={{textDecoration: 'none'}} to={`unit/${unit}`}>
+                <Chip
+                    style={chipStyle}
+                    color="secondary" 
+                    avatar={getAvatar(unit)} 
+                    variant="outlined"
+                    label={name} />
+            </Link>
         )
     })
 
