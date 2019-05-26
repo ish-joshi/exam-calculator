@@ -4,13 +4,10 @@ import MainPage from './mainPage'
 import UnitPage from "./unitCalculator";
 
 
-function Index() {
-  return <MainPage/>;
-}
 
-function Units() {
-  return <UnitPage/>;
-}
+
+
+
 
 
 function AppRouter() {
@@ -18,8 +15,8 @@ function AppRouter() {
     <Router>
       
 
-        <Route path="/" exact component={Index} />
-        <Route path="/unit/:unitcode" component={Units} />
+        <Route path="/" exact component={MainPage} />
+        <Route exact path="/unit/:unitcode" component={UnitPage} />
         
     </Router>
   );
