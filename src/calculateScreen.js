@@ -16,6 +16,8 @@ import { Typography } from '@material-ui/core';
 
 import ResultTable from './neededResultsTable'
 
+import {Link} from 'react-router-dom'
+
 
 const rowCellStyle = {paddingRight: "1%"};
 
@@ -37,7 +39,7 @@ class CalculateTask extends React.Component {
         })
 
 
-        this.state = {structure}
+        this.state = {structure, ...props}
     }
 
 
@@ -53,6 +55,12 @@ class CalculateTask extends React.Component {
         let sum = 0
         res.forEach(i => sum += i);
         return sum;
+    }
+
+
+    getPlaceHolder() {
+        const items = ["80%", "34/40", "20"]
+        return items[Math.floor(Math.random()*items.length)];
     }
 
     decimalRepresentation(markValue, weight) {
@@ -120,7 +128,7 @@ class CalculateTask extends React.Component {
 
 
         const oneLeft = this.onlyOneLeft();
-        const resultTable = oneLeft ? <ResultTable total={total}/> : null;
+        const resultTable = oneLeft ? <ResultTable total={total}/> : <Typography variant="subtitle2" style={{color: 'grey'}} align="center">Fill in all but one row</Typography>;
 
         const stateRepresentation = structure.map((item, index) => {
             const {name, weight, mark} = item;
@@ -142,6 +150,7 @@ class CalculateTask extends React.Component {
                             id="standard-number"
                             label="Mark"
                             type="text"
+                            placeholder={this.getPlaceHolder()}
                             margin="normal"
                             value={mark}
                             onChange={(e) => {this.handleMarkChange(e, index)}}
@@ -157,7 +166,32 @@ class CalculateTask extends React.Component {
 
 
         return (
-            <div>
+            <div style={{padding: "2%", paddingTop: "4%"}}>
+
+<Typography fontWeight="fontWeightLight" align="center" variant="h4">
+                    Calculator for <b>{this.state.unitdata.unitcode}</b>
+                </Typography>
+                <br></br>
+                <br></br>
+
+                <ul>
+                    
+                    <li style={{color: 'grey', marginBottom: "2%"}}>
+                        You have specific marks? enter 3/5
+                    </li>
+                    <li style={{color: 'grey', marginBottom: "2%"}}>
+                        You know your percentage grade for an item? enter 72%
+                    </li>
+                    <li style={{color: 'grey', marginBottom: "2%"}}>
+                        You know your computed grade? enter 20
+                    </li>
+
+                </ul>
+
+                <br></br>
+                <br></br>
+
+
             <Table>
                     <TableHead>
                     <TableRow>
@@ -178,12 +212,25 @@ class CalculateTask extends React.Component {
             <br></br>
             <br></br>
 
+            <Typography align="center">
+                Total percent gained <b>{total.toPrecision(2)}%</b>
+            </Typography>
+            <br></br>
             <LinearProgress variant="determinate" value={total} />
 
             <br></br>
             <br></br>
 
             {resultTable}
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <Link to="/">
+                <Typography align="center" variant="subtitle1">
+                    Calculate Another
+                </Typography>
+            </Link>
 
             </div>
         )

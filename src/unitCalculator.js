@@ -53,7 +53,8 @@ class UnitPage extends React.Component
             <div>
                 <Grid container>
 
-                    <Grid item sm={12}>
+                    <Grid item sm={false} md={2} />
+                    <Grid item sm={12} md={8}>
 
                         {
                             !unitavailable && !loading 

@@ -6,6 +6,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import Check from '@material-ui/icons/Check'
+
 import { Typography } from '@material-ui/core';
 
 function getGO(g,t){
@@ -20,6 +22,7 @@ const rowCellStyle = {paddingRight: "1%"};
 const grades = [getGO("P", 50), getGO("C", 60), getGO("D", 70), getGO("HD", 80)]
 
 
+
 function ResultTable(props) {
 
     console.log("ResultTable Props")
@@ -28,6 +31,8 @@ function ResultTable(props) {
     const {total} = props;
 
     const representation = grades.map((item, index) => {
+        const remaining = item.thold - total;
+
         return (
             <TableRow key={"" + index}>
                 <TableCell align="center" style={rowCellStyle} scope="row">
@@ -37,7 +42,7 @@ function ResultTable(props) {
                     </TableCell>
                     <TableCell align="center" style={rowCellStyle} scope="row">
                         <Typography>
-                            {item.thold - total}
+                            {remaining < 1 ? <Check/> : remaining}
                         </Typography>
                     </TableCell>
                     </TableRow>

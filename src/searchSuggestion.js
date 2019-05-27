@@ -71,6 +71,7 @@ class UnitSearch extends Component {
                     id="standard-search"
                     label="Search for Unit"
                     type="search"
+                    value={overrideLink}
                     autoFocus={true}
                     margin="normal"
                     fullWidth
