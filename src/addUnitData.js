@@ -68,7 +68,7 @@ class AddUnitData extends Component {
             unitdata = unitdata.map(i => Number(i.weight));
             const s = unitdata.reduce((p, a) => p + a,0)
             
-            if (s >= 100) {
+            if (s >= 100 && s <= 110) {
                 return {
                     validated: true
                 }
@@ -125,7 +125,7 @@ class AddUnitData extends Component {
 
         
         const validationRes = this.performValidation(); 
-        
+        const {unitcode} = this.props;
 
         const stateRepresentation = this.state.unitdata.map((item, index) => {
             const {name, weight} = item;
@@ -163,7 +163,24 @@ class AddUnitData extends Component {
 
 
         return (
-            <div>
+            <div style={{padding: "1%"}}>
+
+            <header style={{paddingTop: "4%", paddingBottom: "4%"}}>
+                <Typography fontWeight="fontWeightLight" align="center" variant="h2" component="h3">
+                    First for <b>{unitcode}</b>
+                </Typography>
+
+                <br></br>
+                
+
+                <Typography align="center" variant="subtitle1">
+                    Help others by adding an assessment structure
+                </Typography>
+
+            </header>
+
+            <br></br>
+            <br></br>
 
                 <Table>
                     <TableHead>
@@ -189,6 +206,9 @@ class AddUnitData extends Component {
 
                         <TableRow>
                         <TableCell style={{padding: "1%", borderBottom: "none"}} align="center" colSpan={3} component="th" scope="row">
+                            <br></br>
+                            <br></br>
+
                             <Button onClick={(e) => this.submitData(e)} disabled={!validationRes.validated}  variant="contained" color="primary">
                                 Submit
                             </Button>

@@ -53,7 +53,7 @@ class UnitSearch extends Component {
     handleChange(e) {
         const {value} = e.target;
         this.setState({
-            unitcode: value
+            unitcode: value.toUpperCase()
         }, () => {
             this.throttleAutoComplete(value)
         })
