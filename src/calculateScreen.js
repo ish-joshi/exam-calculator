@@ -10,7 +10,11 @@ import TableRow from '@material-ui/core/TableRow';
 
 import TextField from '@material-ui/core/TextField'
 
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 import { Typography } from '@material-ui/core';
+
+import ResultTable from './neededResultsTable'
 
 
 const rowCellStyle = {paddingRight: "1%"};
@@ -37,12 +41,18 @@ class CalculateTask extends React.Component {
     }
 
 
-
-    getTotal() {
+    getListResults() {
         const res = this.state.structure.map(item => {
             return this.decimalRepresentation(item.mark, item.weight);
         })
-        console.log(res);
+        return res;
+    }
+
+    getTotal() {
+        const res = this.getListResults();
+        let sum = 0
+        res.forEach(i => sum += i);
+        return sum;
     }
 
     decimalRepresentation(markValue, weight) {
@@ -62,6 +72,10 @@ class CalculateTask extends React.Component {
             return num > weight ? weight : num;
             // Matched number syntax
         }
+    }
+
+    onlyOneLeft() {
+        return this.getListResults().filter(i => i === 0).length === 1;
     }
 
 
@@ -90,9 +104,7 @@ class CalculateTask extends React.Component {
             const {weight} = structure[index];
             structure[index].mark = value;
             structure[index].calc = this.decimalRepresentation(value, weight)
-            this.setState({structure}, () => {
-                this.getTotal()
-            })
+            this.setState({structure})
         }
     }
 
@@ -101,8 +113,14 @@ class CalculateTask extends React.Component {
         
 
         const {structure} = this.state;
-        console.table(structure);
+        
+        console.table(structure)
 
+        const total = this.getTotal();
+
+
+        const oneLeft = this.onlyOneLeft();
+        const resultTable = oneLeft ? <ResultTable total={total}/> : null;
 
         const stateRepresentation = structure.map((item, index) => {
             const {name, weight, mark} = item;
@@ -114,12 +132,12 @@ class CalculateTask extends React.Component {
                             {name}
                         </Typography>
                     </TableCell>
-                    <TableCell style={rowCellStyle} align="left">
+                    <TableCell align="center" style={rowCellStyle}>
                         <Typography>
                             {weight}
                         </Typography>
                     </TableCell>
-                    <TableCell>
+                    <TableCell style={rowCellStyle} align="center">
                         <TextField
                             id="standard-number"
                             label="Mark"
@@ -129,6 +147,9 @@ class CalculateTask extends React.Component {
                             onChange={(e) => {this.handleMarkChange(e, index)}}
                             fullWidth
                         />
+                    </TableCell>
+                    <TableCell style={rowCellStyle} align="center">
+                        <LinearProgress variant="determinate" value={(item.calc/weight)*100} />
                     </TableCell>
                 </TableRow>
             )
@@ -141,8 +162,9 @@ class CalculateTask extends React.Component {
                     <TableHead>
                     <TableRow>
                         <TableCell align="left">Assessment Name</TableCell>
-                        <TableCell align="left">Weight</TableCell>
+                        <TableCell align="center">Weight</TableCell>
                         <TableCell align="center">Mark</TableCell>
+                        <TableCell align="center">Gain</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
@@ -156,17 +178,19 @@ class CalculateTask extends React.Component {
             <br></br>
             <br></br>
 
+            <LinearProgress variant="determinate" value={total} />
+
+            <br></br>
+            <br></br>
+
+            {resultTable}
+
             </div>
         )
     }
 
 }
 
-{/* <ul>
-                <li>Type <b>[number]</b> for actual grade</li>
-                <li>Type <b>[number]%</b> if you know your percentage mark</li>
-                <li>Type <b>[number]/[number]</b> for entering actual mark</li>
-            </ul> */}
 
 
 export default CalculateTask;
