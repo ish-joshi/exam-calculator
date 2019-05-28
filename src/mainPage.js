@@ -16,6 +16,9 @@ function MainPage() {
       <Typography align="center" variant="h2" component="h2" gutterBottom>
         Exam Calculator
       </Typography>
+      <Typography align="center" variant="h6" component="h2" gutterBottom>
+        Monash
+      </Typography>
 
       <UnitSearch/>
       

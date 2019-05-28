@@ -7,10 +7,11 @@ import { throttle } from 'throttle-debounce';
 import UnitSuggestions from './unitSuggestions'
 
 import {Link} from 'react-router-dom';
+import Disclaimer from './disclaimer';
 
 
 const textFieldStyle = {
-  marginTop: "14%",
+  marginTop: "7%",
   width: "90%",
   marginLeft: "5%"
 }
@@ -89,6 +90,12 @@ class UnitSearch extends Component {
                     Cannot find {overrideLink.toUpperCase()}?
                 </Link>
                 }
+
+<br/><br/>
+<br/><br/>
+
+
+                <Disclaimer/>
                 
             </div>
         )

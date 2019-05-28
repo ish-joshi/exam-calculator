@@ -28,7 +28,7 @@ function ResultTable(props) {
     console.log("ResultTable Props")
     console.log(props)
 
-    const {total} = props;
+    const {total, data} = props;
 
     const representation = grades.map((item, index) => {
         const remaining = item.thold - total;
@@ -42,7 +42,11 @@ function ResultTable(props) {
                     </TableCell>
                     <TableCell align="center" style={rowCellStyle} scope="row">
                         <Typography>
-                            {remaining < 1 ? <Check/> : remaining}
+                            {remaining < 1 ? <Check/> : 
+                            
+                            remaining > data.weight ? <p>Um.. Next Time?</p> :
+                            
+                            ((remaining*100)/data.weight).toPrecision(2) + "% of " + data.name}
                         </Typography>
                     </TableCell>
                     </TableRow>

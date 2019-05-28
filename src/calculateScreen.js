@@ -14,9 +14,13 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { Typography } from '@material-ui/core';
 
+import Disclaimer from './disclaimer'
+
 import ResultTable from './neededResultsTable'
 
 import {Link} from 'react-router-dom'
+
+import firebase from './firebase'
 
 
 const rowCellStyle = {paddingRight: "1%"};
@@ -49,6 +53,17 @@ class CalculateTask extends React.Component {
         })
         return res;
     }
+
+
+    getRemainingWeight() {
+        const f = this.state.structure.filter(i => i.calc === 0);
+        if (f.length !== 1) {
+            return false
+        } else {
+            return {weight: f[0].weight, name: f[0].name};
+        }
+    }
+
 
     getTotal() {
         const res = this.getListResults();
@@ -83,6 +98,7 @@ class CalculateTask extends React.Component {
     }
 
     onlyOneLeft() {
+        console.log(this.getListResults())
         return this.getListResults().filter(i => i === 0).length === 1;
     }
 
@@ -128,7 +144,8 @@ class CalculateTask extends React.Component {
 
 
         const oneLeft = this.onlyOneLeft();
-        const resultTable = oneLeft ? <ResultTable total={total}/> : <Typography variant="subtitle2" style={{color: 'grey'}} align="center">Fill in all but one row</Typography>;
+        const oo = this.getRemainingWeight();
+        const resultTable = oneLeft ? <ResultTable total={total} data={oo} /> : <Typography variant="subtitle2" style={{color: 'grey'}} align="center">Fill in all but one row</Typography>;
 
         const stateRepresentation = structure.map((item, index) => {
             const {name, weight, mark} = item;
@@ -142,7 +159,7 @@ class CalculateTask extends React.Component {
                     </TableCell>
                     <TableCell align="center" style={rowCellStyle}>
                         <Typography>
-                            {weight}
+                            {weight}%
                         </Typography>
                     </TableCell>
                     <TableCell style={rowCellStyle} align="center">
@@ -165,12 +182,20 @@ class CalculateTask extends React.Component {
         })
 
 
+        // <Typography onClick={(e) => {
+        //     firebase.firestore().collection("units").doc(this.state.unitdata.unitcode).set({});
+        // }} variant="subtitle2">Change it?</Typography>
+        
+
+
         return (
             <div style={{padding: "2%", paddingTop: "4%"}}>
 
 <Typography fontWeight="fontWeightLight" align="center" variant="h4">
                     Calculator for <b>{this.state.unitdata.unitcode}</b>
                 </Typography>
+
+                
                 <br></br>
                 <br></br>
 
@@ -231,6 +256,12 @@ class CalculateTask extends React.Component {
                     Calculate Another
                 </Typography>
             </Link>
+
+
+            <br></br>
+            <br></br>
+
+           <Disclaimer/>
 
             </div>
         )
