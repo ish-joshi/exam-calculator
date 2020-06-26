@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import TextField from '@material-ui/core/TextField'
 import fire from './firebase'
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { throttle } from 'throttle-debounce';
+import { throttle, debounce } from 'throttle-debounce';
 
 import UnitSuggestions from './unitSuggestions'
 
@@ -16,7 +17,7 @@ const textFieldStyle = {
   marginLeft: "5%"
 }
 
-const THROTTLE_INTERVAL = 500;
+const THROTTLE_INTERVAL = 800;
 
 
 
@@ -28,26 +29,36 @@ class UnitSearch extends Component {
 
     state = {
         suggestions: [],
-        unitcode: ""
+        unitcode: "",
+        loading: false
     }
 
     constructor(props) {
         super(props)
-        this.throttleAutoComplete = throttle(THROTTLE_INTERVAL, this.fulfillAutoComplete)
+        this.fulfillAutoComplete = this.fulfillAutoComplete.bind(this)
+        this.throttleAutoComplete = debounce(THROTTLE_INTERVAL, this.fulfillAutoComplete)
     }
 
     async fulfillAutoComplete(query) {
-        const suggestionsCall = funcs.httpsCallable('search')
-        const suggestions = await suggestionsCall({query})
 
-        const data = suggestions.data;
+        console.log(`Called with query ${query}`)
 
-        if (data.success !== false) {
+        this.setState({loading: true})
 
-            console.log(suggestions);
-            console.log(`Fetched ${suggestions.data.length} items`)
-            this.setState({suggestions: suggestions.data})
+        try {
+            const suggestionsCall = funcs.httpsCallable('search')
+            const suggestions = await suggestionsCall({query})
 
+            const data = suggestions.data;
+
+            if (data.success !== false) {
+                console.log(`Fetched ${suggestions.data.length} items`)
+                this.setState({suggestions: suggestions.data})
+            }
+        } catch (e) {
+            console.error("An error occured", e.toString())
+        } finally {
+            this.setState({loading: false})
         }
     }
 
@@ -66,6 +77,9 @@ class UnitSearch extends Component {
         const overrideLink = this.state.unitcode;
 
         return (
+            <div>
+                
+
             <div style={textFieldStyle}>
                 <TextField
                     autoComplete="off"
@@ -78,7 +92,9 @@ class UnitSearch extends Component {
                     fullWidth
                     onChange={(e) => this.handleChange(e)}
                 />
-
+                { this.state.loading ? 
+                <LinearProgress /> : null
+                }
                 <br/><br/>
 
                 <UnitSuggestions suggestions={this.state.suggestions}/>
@@ -97,6 +113,7 @@ class UnitSearch extends Component {
 
                 <Disclaimer/>
                 
+            </div>
             </div>
         )
     }
