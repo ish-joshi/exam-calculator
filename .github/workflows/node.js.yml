@@ -20,7 +20,7 @@ jobs:
       - name: Dependencies
         run: npm install
       - name: Build
-        run: npm run-script build
+        run: CI=false npm run-script build
       - name: archive
         uses: actions/upload-artifact@master
         with:
