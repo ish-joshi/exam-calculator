@@ -8,7 +8,7 @@ const chipStyle = {
     margin: "1%"
 }
 
-const DISPLAY_LIMIT = 5;
+const DISPLAY_LIMIT = Math.round(9);
 
 
 function getAvatar(unitCode) {
