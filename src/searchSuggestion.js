@@ -18,6 +18,7 @@ const textFieldStyle = {
 }
 
 const THROTTLE_INTERVAL = 800;
+const DISPLAY_LIMIT = 11;
 
 
 
@@ -53,7 +54,8 @@ class UnitSearch extends Component {
 
             if (data.success !== false) {
                 console.log(`Fetched ${suggestions.data.length} items`)
-                this.setState({suggestions: suggestions.data})
+                const howMany = suggestions.data.length < DISPLAY_LIMIT ? suggestions.data.length : DISPLAY_LIMIT;
+                this.setState({suggestions: suggestions.data.splice(0, howMany)})
             }
         } catch (e) {
             console.error("An error occured", e.toString())
@@ -67,6 +69,7 @@ class UnitSearch extends Component {
         this.setState({
             unitcode: value.toUpperCase()
         }, () => {
+            // this.throttleAutoComplete.cancel()
             this.throttleAutoComplete(value)
         })
         

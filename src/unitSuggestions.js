@@ -28,17 +28,20 @@ function Suggestions(props) {
         )
     }
 
-    if (suggestions.length > DISPLAY_LIMIT) {
-        suggestions = suggestions.splice(0, DISPLAY_LIMIT);
-    }
+    let toShow = suggestions;
 
-    if (suggestions.length === 0) {
-        return (
-            <p>No matches found</p>
-        )
-    }
+    // if (suggestions.length > DISPLAY_LIMIT) {
+    //     toShow = suggestions.splice(0, DISPLAY_LIMIT);
+    //     console.log("Showing suggestions ", suggestions)
+    // }
 
-    const out = suggestions.map(item => {
+    // if (suggestions.length === 0) {
+    //     return (
+    //         <p>No matches found</p>
+    //     )
+    // }
+
+    const out = toShow.map(item => {
         const {name, unit} = item;
         return (
             <Link key={unit} style={{textDecoration: 'none'}} to={`unit/${unit}`}>
@@ -51,6 +54,8 @@ function Suggestions(props) {
             </Link>
         )
     })
+
+    console.log(out)
 
     return (
 
